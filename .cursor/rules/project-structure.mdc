@@ -1,0 +1,38 @@
+---
+alwaysApply: true
+description: "Project structure and architecture for Bank of Anthos fraud detection integration"
+---
+
+# Bank of Anthos Fraud Detection Project Structure
+
+## Repository Layout
+- **Upstream**: Google's Bank of Anthos (upstream)
+- **Primary Source**: Your forked repo (origin) - serves as source for cluster deployment
+- **Branch**: `feat/fraud-detection`
+- **Conda Environment**: `fraud-detection`
+- **Purpose**: Fork contains all fraud detection features for deployment
+
+## Key Directories
+- `src/ai-services/fraud-detection/` - AI fraud detection service (Python Flask)
+- `src/ledger/ledgerwriter/` - Java Spring Boot service with fraud integration
+- `src/ledger/transactionhistory/` - Java Spring Boot service for transaction retrieval
+- `src/frontend/` - Python Flask frontend with AI insights pop-up
+- `src/ledger/ledger-db/` - PostgreSQL database with fraud columns
+
+## Microservices Architecture
+1. **Frontend** → **Ledger Writer** → **Fraud Detection** → **Database**
+2. **Transaction History** ← **Database** → **Frontend** (AI insights display)
+
+## Database Schema
+- `TRANSACTIONS` table includes:
+  - `FRAUD_RISK_SCORE` (DOUBLE PRECISION)
+  - `FRAUD_RECOMMENDATION` (VARCHAR)
+  - `FRAUD_CONFIDENCE` (DOUBLE PRECISION)
+  - `FRAUD_AI_INSIGHTS` (TEXT)
+
+## Technology Stack
+- **Backend**: Java 17, Spring Boot, Maven, Jib
+- **AI Service**: Python 3.12, Flask, Google Vertex AI, Gemini
+- **Frontend**: Python Flask, HTML/CSS/JavaScript
+- **Database**: PostgreSQL
+- **Deployment**: Kubernetes, Docker, Google Container Registry

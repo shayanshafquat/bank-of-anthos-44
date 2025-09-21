@@ -1,0 +1,79 @@
+---
+globs: k8s/**/*.yaml,src/**/skaffold.yaml,src/**/Dockerfile
+description: "Deployment and repository management rules for fraud detection features"
+---
+
+# Deployment Rules
+
+## Repository Structure
+- **Primary Source**: Your forked repository (remote origin)
+- **Upstream**: Google's Bank of Anthos (upstream)
+- **Branch**: `feat/fraud-detection`
+- **Purpose**: Source repository for cluster deployment with fraud detection features
+
+## Repository Management
+```bash
+# Sync with upstream
+git fetch upstream
+git merge upstream/main
+
+# Push to your fork
+git push origin feat/fraud-detection
+
+# Create feature branches
+git checkout -b feature/ai-insights-popup
+git push origin feature/ai-insights-popup
+```
+
+## Build Process for Forked Repo
+```bash
+# Activate environment
+export PATH="/Users/shayan/anaconda3/envs/fraud-detection/bin:$PATH"
+
+# Build Java services (for future deployment)
+cd src/ledger/ledgerwriter
+../../../mvnw clean compile jib:build -Dimage=gcr.io/finance-project-471400/ledgerwriter:v0.7.0
+
+# Build Python services
+cd src/ai-services/fraud-detection
+docker buildx build --platform linux/amd64 -t gcr.io/finance-project-471400/fraud-detection:latest . --push
+
+# Build frontend
+cd src/frontend
+docker buildx build --platform linux/amd64 -t gcr.io/finance-project-471400/frontend:v0.7.0 . --push
+```
+
+## Code Organization
+- **Source Code**: All fraud detection code in your fork
+- **Documentation**: README updates and deployment guides
+- **Configuration**: Kubernetes manifests and Dockerfiles
+- **Testing**: Test scripts and validation tools
+
+## Future Cluster Deployment
+When ready for cluster deployment:
+- **Cluster**: GKE (Google Kubernetes Engine)
+- **Image Registry**: Google Container Registry (gcr.io)
+- **Workload Identity**: Required for Vertex AI access
+- **Database Migration**: Apply fraud schema changes
+
+## Database Schema (For Future Deployment)
+```sql
+-- Add fraud columns to TRANSACTIONS table
+ALTER TABLE TRANSACTIONS ADD COLUMN FRAUD_RISK_SCORE DOUBLE PRECISION;
+ALTER TABLE TRANSACTIONS ADD COLUMN FRAUD_RECOMMENDATION VARCHAR(255);
+ALTER TABLE TRANSACTIONS ADD COLUMN FRAUD_CONFIDENCE DOUBLE PRECISION;
+ALTER TABLE TRANSACTIONS ADD COLUMN FRAUD_AI_INSIGHTS TEXT;
+```
+
+## Repository Features
+- **Fraud Detection Service**: Complete Python Flask implementation
+- **Java Integration**: Updated ledger writer and transaction history
+- **Frontend Enhancement**: AI insights pop-up functionality
+- **Database Schema**: Fraud-related column definitions
+- **Documentation**: Comprehensive setup and deployment guides
+
+## Version Control Best Practices
+- **Commit Messages**: Clear, descriptive commits with fraud detection context
+- **Branch Strategy**: Feature branches for specific fraud detection components
+- **Pull Requests**: Detailed PR descriptions with testing notes
+- **Code Review**: Self-review before pushing to fork

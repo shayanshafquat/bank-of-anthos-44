@@ -1,0 +1,44 @@
+---
+alwaysApply: true
+description: "User workflow and development process rules"
+---
+
+# User Workflow Rules
+
+## Development Environment Setup
+1. **Conda Environment**: Always use `fraud-detection` environment
+2. **Repository**: Your forked repository (source for cluster deployment)
+3. **Branch**: `feat/fraud-detection`
+4. **Remote**: `origin` (your fork), `upstream` (Google's repo)
+
+## Daily Workflow
+1. **Sync with upstream**: `git fetch upstream && git merge upstream/main`
+2. **Activate environment**: `export PATH="/Users/shayan/anaconda3/envs/fraud-detection/bin:$PATH"`
+3. **Develop features**: Add fraud detection functionality to your fork
+4. **Build services**: Use Maven for Java, Docker for Python (for testing)
+5. **Push to fork**: `git push origin feat/fraud-detection`
+6. **Future deployment**: Use fork as source for cluster deployment
+
+## Code Quality Standards
+- **Java**: Follow Spring Boot conventions, proper error handling
+- **Python**: PEP 8 style, type hints, comprehensive logging
+- **Frontend**: Responsive design, accessibility, user experience
+- **Testing**: Unit tests for critical components
+
+## Git Workflow
+1. **Feature branches**: Create from `feat/fraud-detection`
+2. **Commit messages**: Clear, descriptive, reference issues
+3. **Pull requests**: Detailed descriptions, screenshots, testing notes
+4. **Code review**: Address feedback promptly
+
+## Debugging Process
+1. **Check logs**: `kubectl logs -l app=<service-name>`
+2. **Verify deployments**: `kubectl get pods`
+3. **Test APIs**: Use curl or Postman
+4. **Database queries**: Connect to PostgreSQL directly
+
+## Performance Considerations
+- **Timeout settings**: 15 seconds for fraud analysis
+- **Error handling**: Graceful degradation
+- **Resource limits**: Appropriate CPU/memory limits
+- **Caching**: Consider Redis for frequently accessed data
